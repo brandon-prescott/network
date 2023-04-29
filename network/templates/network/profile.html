@@ -5,10 +5,11 @@
 
     {% if user.id != profile.id %}
         <div>
-            <!-- If following == True -->
-                <button type="submit" class="btn btn-outline-success">Following</button>
-            <!-- else -->
+            {% if is_following == True %}
+                <button type="submit" class="btn btn-success">Following</button>
+            {% else %}
                 <button type="submit" class="btn btn-outline-success">Follow</button>
+            {% endif %}
         </div>
     {% endif %}
 

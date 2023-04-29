@@ -87,18 +87,33 @@ def create(request):
         return redirect(index)
     
 
-def profile(request, user_id):
-    all_user_posts = Post.objects.filter(user=user_id).order_by("-time")
+def profile(request, profile_id):
+    all_user_posts = Post.objects.filter(user=profile_id).order_by("-time")
     number_of_posts = len(all_user_posts)
 
-    followers_count = len(Follow.objects.filter(following=user_id))
-    following_count = len(Follow.objects.filter(user=user_id))
+    user = User.objects.get(id=request.user.id)
+    profile = User.objects.get(id=profile_id)
+
+    followers = Follow.objects.filter(following=profile_id)
+    follower_list = []
+    for follower in followers:
+        follower_list.append(follower.user)
+
+    if user in follower_list:
+        is_following = True
+    else:
+        is_following = False
+
+    print(is_following)
+
+    following = Follow.objects.filter(user=profile_id)
     
     return render(request, "network/profile.html", {
-        "user": User.objects.get(id=request.user.id),
-        "profile": User.objects.get(id=user_id),
-        "followers_count": followers_count,
-        "following_count": following_count,
+        "user": user,
+        "profile": profile,
+        "is_following": is_following,
+        "followers_count": len(followers),
+        "following_count": len(following),
         "all_user_posts": all_user_posts,
         "number_of_posts": number_of_posts
     })
