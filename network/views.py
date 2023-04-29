@@ -85,3 +85,19 @@ def create(request):
             return redirect(index)
     else:
         return redirect(index)
+    
+
+def profile(request):
+    all_user_posts = Post.objects.filter(user=request.user.id).order_by("-time")
+    number_of_posts = len(all_user_posts)
+
+    followers_count = len(Follow.objects.filter(following=request.user.id))
+    following_count = len(Follow.objects.filter(user=request.user.id))
+    
+    return render(request, "network/profile.html", {
+        "user": User.objects.get(id=request.user.id),
+        "followers_count": followers_count,
+        "following_count": following_count,
+        "all_user_posts": all_user_posts,
+        "number_of_posts": number_of_posts
+    })
