@@ -10,8 +10,12 @@ from .forms import PostForm
 
 
 def index(request):
+    all_posts = Post.objects.all().order_by("-time")
+    number_of_posts = len(all_posts)
     return render(request, "network/index.html", {
-        "form": PostForm
+        "form": PostForm,
+        "all_posts": all_posts,
+        "number_of_posts": number_of_posts
     })
 
 

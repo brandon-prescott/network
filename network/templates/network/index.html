@@ -18,6 +18,28 @@
         </div>
     {% endif %}
     <hr>
+    {% if number_of_posts > 0 %}
+        {% for post in all_posts %}
+            <div>
+                <div>
+                    <strong>{{ post.user }}</strong>
+                </div>
+                <div>
+                    {{ post.content }}
+                </div>
+                <div>
+                    {{ post.time }}
+                </div>
+                <div>
+                    Number of likes: {{ post.number_of_likes }}
+                </div>
+                <hr>
+            </div>
+        {% endfor %}
+    {% else %}
+        No active posts
+    {% endif %}
+
 
 
 {% endblock %}
