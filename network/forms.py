@@ -12,6 +12,7 @@ class PostForm(forms.ModelForm):
         widgets = {
             "content": forms.Textarea(attrs={
             "placeholder": "What's happening?",
-            "class": "form-control"
+            "class": "form-control",
+            "rows": 3
             })
         }

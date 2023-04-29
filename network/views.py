@@ -10,7 +10,9 @@ from .forms import PostForm
 
 
 def index(request):
-    return render(request, "network/index.html")
+    return render(request, "network/index.html", {
+        "form": PostForm
+    })
 
 
 def login_view(request):
@@ -63,3 +65,7 @@ def register(request):
         return HttpResponseRedirect(reverse("index"))
     else:
         return render(request, "network/register.html")
+
+
+def create(request):
+    return redirect(index)
