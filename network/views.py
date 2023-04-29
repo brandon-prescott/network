@@ -67,5 +67,17 @@ def register(request):
         return render(request, "network/register.html")
 
 
+@login_required(login_url="login")
 def create(request):
-    return redirect(index)
+    if request.method == "POST":
+        form = PostForm(request.POST)
+        if form.is_valid():
+            # Save post to database
+            new_post = Post(
+                user=User.objects.get(id=request.user.id),
+                content = form.cleaned_data["content"]
+            )
+            new_post.save()
+            return redirect(index)
+    else:
+        return redirect(index)
