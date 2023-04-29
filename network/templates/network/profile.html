@@ -3,6 +3,15 @@
 {% block body %}
     <h2>{{ profile.username }}</h2>
 
+    {% if user.id != profile.id %}
+        <div>
+            <!-- If following == True -->
+                <button type="submit" class="btn btn-outline-success">Following</button>
+            <!-- else -->
+                <button type="submit" class="btn btn-outline-success">Follow</button>
+        </div>
+    {% endif %}
+
     <div>
         Followers: {{ followers_count }}
     </div>

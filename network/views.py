@@ -102,3 +102,7 @@ def profile(request, user_id):
         "all_user_posts": all_user_posts,
         "number_of_posts": number_of_posts
     })
+
+
+def follow(request):
+    return redirect(index)
