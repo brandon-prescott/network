@@ -104,8 +104,6 @@ def profile(request, profile_id):
     else:
         is_following = False
 
-    print(is_following)
-
     following = Follow.objects.filter(user=profile_id)
     
     return render(request, "network/profile.html", {
@@ -119,5 +117,31 @@ def profile(request, profile_id):
     })
 
 
+@login_required(login_url="login")
 def follow(request):
-    return redirect(index)
+    if request.method == "POST":
+        profile_id = request.POST["profile_id"]
+        follow_action = request.POST["follow_action"]
+
+        if follow_action not in ["follow", "unfollow"]:
+            return render(request, "auctions/error.html", {
+            "message": "Bad request",
+            "code": "400"
+            })
+        
+        if follow_action == "follow":
+            new_follow = Follow(
+                user = User.objects.get(id=request.user.id),
+                following = User.objects.get(id=profile_id)
+            )
+            new_follow.save()
+            return redirect(profile, profile_id=profile_id)
+        
+        if follow_action == "unfollow":
+            user_id = request.user.id
+            filter = {"user": user_id, "following": profile_id}
+            Follow.objects.filter(**filter).delete()
+            return redirect(profile, profile_id=profile_id)
+
+    else:
+        return redirect(index)

@@ -5,11 +5,18 @@
 
     {% if user.id != profile.id %}
         <div>
-            {% if is_following == True %}
-                <button type="submit" class="btn btn-success">Following</button>
-            {% else %}
-                <button type="submit" class="btn btn-outline-success">Follow</button>
-            {% endif %}
+            <form action="{% url 'follow' %}" method="POST">
+                {% csrf_token %}
+                {% if is_following == True %}
+                    <input type="hidden" name="follow_action" value="unfollow">
+                    <input type="hidden" name="profile_id" value="{{ profile.id }}">
+                    <button type="submit" class="btn btn-success">Following</button>
+                {% else %}
+                    <input type="hidden" name="follow_action" value="follow">
+                    <input type="hidden" name="profile_id" value="{{ profile.id }}">
+                    <button type="submit" class="btn btn-outline-success">Follow</button>
+                {% endif %}
+            </form>
         </div>
     {% endif %}
 
