@@ -144,4 +144,19 @@ def follow(request):
             return redirect(profile, profile_id=profile_id)
 
     else:
-        return redirect(index)
+
+        user_id = request.user.id
+        following = Follow.objects.filter(user=user_id).order_by("-time")
+
+        follow_list = []
+        for follow in following:
+            follow_list.append(follow.following.id)
+
+        following_posts = Post.objects.filter(user__in=follow_list).order_by("-time")
+        number_of_posts = len(following_posts)
+        print(following_posts)
+    
+        return render(request, "network/following.html", {
+            "following_posts": following_posts,
+            "number_of_posts": number_of_posts
+        })

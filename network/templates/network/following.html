@@ -1,0 +1,30 @@
+{% extends "network/layout.html" %}
+
+{% block body %}
+    <h2>{{ user.username }} is following</h2>
+
+    <hr>
+    {% if number_of_posts > 0 %}
+        {% for post in following_posts %}
+            <div>
+                <div>
+                    <a href="{% url 'profile' profile_id=post.user.id %}"><strong>{{ post.user }}</strong></a>
+                </div>
+                <div>
+                    {{ post.content }}
+                </div>
+                <div>
+                    {{ post.time }}
+                </div>
+                <div>
+                    Number of likes: {{ post.number_of_likes }}
+                </div>
+                <hr>
+            </div>
+        {% endfor %}
+    {% else %}
+        No active posts
+    {% endif %}
+
+
+{% endblock %}
