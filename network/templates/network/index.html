@@ -22,7 +22,7 @@
         {% for post in all_posts %}
             <div>
                 <div>
-                    <strong>{{ post.user }}</strong>
+                    <a href="{% url 'profile' profile_id=post.user.id %}"><strong>{{ post.user }}</strong></a>
                 </div>
                 <div>
                     {{ post.content }}
