@@ -4,6 +4,7 @@ from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.urls import reverse
+from django.core.paginator import Paginator
 
 from .models import User, Post, Like, Follow
 from .forms import PostForm
@@ -12,9 +13,15 @@ from .forms import PostForm
 def index(request):
     all_posts = Post.objects.all().order_by("-time")
     number_of_posts = len(all_posts)
+
+    # Show 10 posts per page
+    paginator = Paginator(all_posts, 10)
+    page_number = request.GET.get("page")
+    page_obj = paginator.get_page(page_number)
+
     return render(request, "network/index.html", {
         "form": PostForm,
-        "all_posts": all_posts,
+        "page_obj": page_obj,
         "number_of_posts": number_of_posts
     })
 
@@ -105,6 +112,11 @@ def profile(request, profile_id):
         is_following = False
 
     following = Follow.objects.filter(user=profile_id)
+
+    # Show 10 posts per page
+    paginator = Paginator(all_user_posts, 10)
+    page_number = request.GET.get("page")
+    page_obj = paginator.get_page(page_number)
     
     return render(request, "network/profile.html", {
         "user": user,
@@ -112,7 +124,7 @@ def profile(request, profile_id):
         "is_following": is_following,
         "followers_count": len(followers),
         "following_count": len(following),
-        "all_user_posts": all_user_posts,
+        "page_obj": page_obj,
         "number_of_posts": number_of_posts
     })
 
@@ -154,9 +166,13 @@ def follow(request):
 
         following_posts = Post.objects.filter(user__in=follow_list).order_by("-time")
         number_of_posts = len(following_posts)
-        print(following_posts)
+
+        # Show 10 posts per page
+        paginator = Paginator(following_posts, 10)
+        page_number = request.GET.get("page")
+        page_obj = paginator.get_page(page_number)
     
         return render(request, "network/following.html", {
-            "following_posts": following_posts,
+            "page_obj": page_obj,
             "number_of_posts": number_of_posts
         })
