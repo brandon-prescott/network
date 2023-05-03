@@ -8,16 +8,15 @@ from django.core.paginator import Paginator
 
 from .models import User, Post, Like, Follow
 from .forms import PostForm
+from .utils import get_page_objects
 
 
 def index(request):
     all_posts = Post.objects.all().order_by("-time")
     number_of_posts = len(all_posts)
 
-    # Show 10 posts per page
-    paginator = Paginator(all_posts, 10)
-    page_number = request.GET.get("page")
-    page_obj = paginator.get_page(page_number)
+    # Only show 10 posts per page
+    page_obj = get_page_objects(request, all_posts)
 
     return render(request, "network/index.html", {
         "form": PostForm,
@@ -113,10 +112,8 @@ def profile(request, profile_id):
 
     following = Follow.objects.filter(user=profile_id)
 
-    # Show 10 posts per page
-    paginator = Paginator(all_user_posts, 10)
-    page_number = request.GET.get("page")
-    page_obj = paginator.get_page(page_number)
+    # Only show 10 posts per page
+    page_obj = get_page_objects(request, all_user_posts)
     
     return render(request, "network/profile.html", {
         "user": user,
@@ -167,10 +164,8 @@ def follow(request):
         following_posts = Post.objects.filter(user__in=follow_list).order_by("-time")
         number_of_posts = len(following_posts)
 
-        # Show 10 posts per page
-        paginator = Paginator(following_posts, 10)
-        page_number = request.GET.get("page")
-        page_obj = paginator.get_page(page_number)
+        # Only show 10 posts per page
+        page_obj = get_page_objects(request, following_posts)
     
         return render(request, "network/following.html", {
             "page_obj": page_obj,
