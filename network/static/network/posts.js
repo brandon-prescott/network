@@ -19,7 +19,18 @@ document.addEventListener('DOMContentLoaded', function() {
 function editPost(postID) {
     console.log(`Post ${postID} clicked!`);
 
+    // Replace content with editable text area
     document.querySelector(`#content-div-${postID}-saved`).style.display = 'none';
     document.querySelector(`#content-div-${postID}-editing`).style.display = 'block';
+
+    // Replace edit button with save button
+    document.querySelector(`#edit-div-${postID}`).style.display = 'none';
+    document.querySelector(`#save-div-${postID}`).style.display = 'block';
+
+    const saveBtn = document.querySelector(`#save-btn-${postID}`);
+
+    saveBtn.addEventListener('click', function() {
+        console.log(`Saved post ${postID}`);
+    });
 
 }
