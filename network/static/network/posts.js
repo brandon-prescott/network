@@ -65,7 +65,5 @@ function savePost(postID) {
 
     }
 
-    
-
 
 }
