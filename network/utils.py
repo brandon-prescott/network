@@ -26,14 +26,17 @@ def post_content(request, post_id):
     if request.method == "GET":
         return JsonResponse(post.serialize())
     
-    # Update post contents
+    # Update post contents if input is valid
     elif request.method == "POST":
         data = json.loads(request.body)
         if data.get("content") is not None:
-            post.content = data["content"]
-        post.save()
-        return HttpResponse(status=204)
+            if data["content"] == "" or data["content"].isspace() == True:
+                return HttpResponse(status=400)
+            else:
+                post.content = data["content"]
+                post.save()
+                return HttpResponse(status=204)
     
     # Post must be via GET or POST
     else:
-        return JsonResponse({"error: GET or POST request required."}, status=400)
+        return JsonResponse({"error": "GET or POST request required."}, status=400)
