@@ -5,3 +5,7 @@ body {
 .edit-content {
     display: none;
 }
+
+.save-content {
+    display: none;
+}
