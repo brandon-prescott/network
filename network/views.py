@@ -1,14 +1,16 @@
+import json
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.db import IntegrityError
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.core.paginator import Paginator
+from django.views.decorators.csrf import csrf_protect
 
 from .models import User, Post, Like, Follow
 from .forms import PostForm
-from .utils import get_page_objects
+from .utils import get_page_objects, update_post_content
 
 
 def index(request):
@@ -94,36 +96,36 @@ def create(request):
     
 
 def profile(request, profile_id):
-    all_user_posts = Post.objects.filter(user=profile_id).order_by("-time")
-    number_of_posts = len(all_user_posts)
+        all_user_posts = Post.objects.filter(user=profile_id).order_by("-time")
+        number_of_posts = len(all_user_posts)
 
-    user = User.objects.get(id=request.user.id)
-    profile = User.objects.get(id=profile_id)
+        user = User.objects.get(id=request.user.id)
+        profile = User.objects.get(id=profile_id)
 
-    followers = Follow.objects.filter(following=profile_id)
-    follower_list = []
-    for follower in followers:
-        follower_list.append(follower.user)
+        followers = Follow.objects.filter(following=profile_id)
+        follower_list = []
+        for follower in followers:
+            follower_list.append(follower.user)
 
-    if user in follower_list:
-        is_following = True
-    else:
-        is_following = False
+        if user in follower_list:
+            is_following = True
+        else:
+            is_following = False
 
-    following = Follow.objects.filter(user=profile_id)
+        following = Follow.objects.filter(user=profile_id)
 
-    # Only show 10 posts per page
-    page_obj = get_page_objects(request, all_user_posts)
-    
-    return render(request, "network/profile.html", {
-        "user": user,
-        "profile": profile,
-        "is_following": is_following,
-        "followers_count": len(followers),
-        "following_count": len(following),
-        "page_obj": page_obj,
-        "number_of_posts": number_of_posts
-    })
+        # Only show 10 posts per page
+        page_obj = get_page_objects(request, all_user_posts)
+        
+        return render(request, "network/profile.html", {
+            "user": user,
+            "profile": profile,
+            "is_following": is_following,
+            "followers_count": len(followers),
+            "following_count": len(following),
+            "page_obj": page_obj,
+            "number_of_posts": number_of_posts
+        })
 
 
 @login_required(login_url="login")
@@ -171,3 +173,15 @@ def follow(request):
             "page_obj": page_obj,
             "number_of_posts": number_of_posts
         })
+    
+
+@login_required(login_url="login")
+@csrf_protect
+def post(request, post_id):
+    return update_post_content(request, post_id)
+
+
+@login_required(login_url="login")
+@csrf_protect
+def profile_post(request, post_id):
+    return update_post_content(request, post_id)

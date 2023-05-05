@@ -15,6 +15,16 @@ class Post(models.Model):
 
     def __str__(self):
         return f"{str(self.user)}_{str(self.time)}"
+
+    def serialize(self):
+        return {
+            "id": self.id,
+            "user": self.user.username,
+            "content": self.content,
+            "number_of_likes": self.number_of_likes,
+            "time": self.time
+        }
+
     
 
 class Like(models.Model):
