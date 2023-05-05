@@ -10,7 +10,7 @@ from django.views.decorators.csrf import csrf_protect
 
 from .models import User, Post, Like, Follow
 from .forms import PostForm
-from .utils import get_page_objects, update_post_content
+from .utils import get_page_objects, post_content
 
 
 def index(request):
@@ -178,10 +178,10 @@ def follow(request):
 @login_required(login_url="login")
 @csrf_protect
 def post(request, post_id):
-    return update_post_content(request, post_id)
+    return post_content(request, post_id) # See utils.py for details
 
 
 @login_required(login_url="login")
 @csrf_protect
 def profile_post(request, post_id):
-    return update_post_content(request, post_id)
+    return post_content(request, post_id) # See utils.py for details

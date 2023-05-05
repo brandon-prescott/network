@@ -14,7 +14,7 @@ def get_page_objects(request, posts):
     return page_obj
 
 
-def update_post_content(request, post_id):
+def post_content(request, post_id):
     """Function updates the content of a post if POST request, and returns a JSON of the post content if GET request"""
     # Query for requested post
     try:
