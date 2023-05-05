@@ -1,3 +1,7 @@
 body {
     padding: 10px;
 }
+
+.edit-content {
+    display: none;
+}
