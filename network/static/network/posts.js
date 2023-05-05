@@ -34,29 +34,36 @@ function savePost(postID) {
 
     const newContent = document.querySelector(`#content-textarea-${postID}`).value;
 
-    // Update database with edited post content
-    // Django forbids use of PUT request, so POST request is used with CSRF token for security
-    // Helps prevent user from editing another users post
-    const csrfToken = Cookies.get('csrftoken'); // From 'js-cookie' library included in head of layout.html
-    fetch(`post/${postID}`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'X-CSRFToken': csrfToken
-        },
-        body: JSON.stringify({
-            content: newContent
-        })
-    });
+    // Post cannot be blank or contain only whitespace
+    if (newContent === "" || newContent.trim().length === 0) {
+        document.querySelector(`#input-error-${postID}`).style.display = 'block';
+    } else {
+        // Update database with edited post content
+        // Django forbids use of PUT request, so POST request is used with CSRF token for security
+        // Helps prevent user from editing another users post
+        const csrfToken = Cookies.get('csrftoken'); // From 'js-cookie' library included in head of layout.html
+        fetch(`post/${postID}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': csrfToken
+            },
+            body: JSON.stringify({
+                content: newContent
+            })
+        });
 
-    // Close editable text area and update content HTML on current page
-    document.querySelector(`#content-div-${postID}-saved`).innerHTML = newContent;
-    document.querySelector(`#content-div-${postID}-saved`).style.display = 'block';
-    document.querySelector(`#content-div-${postID}-editing`).style.display = 'none';
+        // Close editable text area and update content HTML on current page
+        document.querySelector(`#content-div-${postID}-saved`).innerHTML = newContent;
+        document.querySelector(`#content-div-${postID}-saved`).style.display = 'block';
+        document.querySelector(`#content-div-${postID}-editing`).style.display = 'none';
+        document.querySelector(`#input-error-${postID}`).style.display = 'none';
 
-    // Replace save button with edit button
-    document.querySelector(`#edit-div-${postID}`).style.display = 'block';
-    document.querySelector(`#save-div-${postID}`).style.display = 'none';
+        // Replace save button with edit button
+        document.querySelector(`#edit-div-${postID}`).style.display = 'block';
+        document.querySelector(`#save-div-${postID}`).style.display = 'none';
+
+    }
 
 
 }
