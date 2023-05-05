@@ -2,10 +2,10 @@ body {
     padding: 10px;
 }
 
-.edit-content {
+.default-hidden {
     display: none;
 }
 
-.save-content {
-    display: none;
+.input-error {
+    color: red;
 }

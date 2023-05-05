@@ -10,7 +10,7 @@
                 <div id="edit-div-{{ post.id }}">
                     <button id="edit-btn-{{ post.id }}">Edit</button>
                 </div>
-                <div class="save-content" id="save-div-{{ post.id }}">
+                <div class="default-hidden" id="save-div-{{ post.id }}">
                     <button id="save-btn-{{ post.id }}">Save</button>
                 </div>
             {% endif %}
@@ -18,8 +18,11 @@
                 {{ post.content }}
             </div>
             {% if user.is_authenticated and user.id == post.user.id %}
-                <div class="edit-content" id="content-div-{{ post.id }}-editing">
+                <div class="default-hidden" id="content-div-{{ post.id }}-editing">
                     <textarea id="content-textarea-{{ post.id }}">{{ post.content }}</textarea> 
+                </div>
+                <div class="default-hidden input-error" id="input-error-{{ post.id }}">
+                    Post cannot be blank.
                 </div>
             {% endif %}
             <div>
