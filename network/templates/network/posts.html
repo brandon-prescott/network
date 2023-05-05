@@ -1,39 +1,50 @@
+{% load static %}
+
 {% if number_of_posts > 0 %}
-        {% for post in page_obj %}
+    {% for post in page_obj %}
+        <div>
             <div>
-                <div>
-                    <a href="{% url 'profile' profile_id=post.user.id %}"><strong>{{ post.user }}</strong></a>
-                </div>
-                <div>
-                    {{ post.content }}
-                </div>
-                <div>
-                    {{ post.time }}
-                </div>
-                <div>
-                    Number of likes: {{ post.number_of_likes }}
-                </div>
-                <hr>
+                <a href="{% url 'profile' profile_id=post.user.id %}"><strong>{{ post.user }}</strong></a>
             </div>
-        {% endfor %}
-    {% else %}
-        No active posts
-    {% endif %}
-    
-    <div class="pagination">
-        <span class="step-links">
-            {% if page_obj.has_previous %}
-                <a href="?page=1">&laquo; first</a>
-                <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+            {% if user.is_authenticated and user.id == post.user.id %}
+                <div id="edit-div-{{ post.id }}">
+                    <button id="edit-btn-{{ post.id }}">Edit</button>
+                </div>
             {% endif %}
+            <div>
+                {{ post.content }}
+            </div>
+            <div>
+                {{ post.time }}
+            </div>
+            <div>
+                Number of likes: {{ post.number_of_likes }}
+            </div>
+            <hr>
+        </div>
+    {% endfor %}
+{% else %}
+    No active posts
+{% endif %}
     
-            <span class="current">
-                Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
-            </span>
-    
-            {% if page_obj.has_next %}
-                <a href="?page={{ page_obj.next_page_number }}">next</a>
-                <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
-            {% endif %}
+<div class="pagination">
+    <span class="step-links">
+        {% if page_obj.has_previous %}
+            <a href="?page=1">&laquo; first</a>
+            <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+        {% endif %}
+
+        <span class="current">
+            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
         </span>
-    </div>
+
+        {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}">next</a>
+            <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+        {% endif %}
+    </span>
+</div>
+
+{% block script %}
+    <script src="{% static 'network/posts.js' %}"></script>
+{% endblock %}
