@@ -99,7 +99,9 @@ def profile(request, profile_id):
         all_user_posts = Post.objects.filter(user=profile_id).order_by("-time")
         number_of_posts = len(all_user_posts)
 
-        user = User.objects.get(id=request.user.id)
+        user = None
+        if request.user.id is not None:
+            user = User.objects.get(id=request.user.id)
         profile = User.objects.get(id=profile_id)
 
         followers = Follow.objects.filter(following=profile_id)
