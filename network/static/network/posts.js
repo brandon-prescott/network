@@ -1,9 +1,11 @@
 document.addEventListener('DOMContentLoaded', function() {
 
-    // Select all buttons with IDs in the format "edit-btn-{id}"
+    // Select all buttons with IDs in the format "...-btn-{id}"
     const editBtns = document.querySelectorAll('[id^="edit-btn-"]');
+    const likeBtns = document.querySelectorAll('[id^="like-btn-"]');
+    const unlikeBtns = document.querySelectorAll('[id^="unlike-btn-"]');
 
-    // Loop through each button and listen for click
+    // Loop through each edit button and listen for click
     editBtns.forEach(function(editBtn) {
         editBtn.addEventListener('click', function() {
             // Get ID of the current post and call editPost
@@ -11,6 +13,25 @@ document.addEventListener('DOMContentLoaded', function() {
             editPost(postID);
         });
     });
+
+    // Loop through each like button and listen for click
+    likeBtns.forEach(function(likeBtn) {
+        likeBtn.addEventListener('click', function() {
+            // Get ID of the current post and call likePost
+            const postID = likeBtn.id.replace('like-btn-', '');
+            likePost(postID);
+        });
+    });
+
+    // Loop through each unlike button and listen for click
+    unlikeBtns.forEach(function(unlikeBtn) {
+        unlikeBtn.addEventListener('click', function() {
+            // Get ID of the current post and call likePost
+            const postID = unlikeBtn.id.replace('unlike-btn-', '');
+            unlikePost(postID);
+        });
+    });
+
 })
 
 
@@ -65,5 +86,62 @@ function savePost(postID) {
 
     }
 
+
+}
+
+
+function likePost(postID) {
+
+    // Replace like button with unlike button
+    document.querySelector(`#like-div-${postID}`).innerHTML = `<button id="unlike-btn-${postID}">Unlike</button>`;
+    document.querySelector(`#like-div-${postID}`).id = `unlike-div-${postID}`;
+    document.querySelector(`#unlike-btn-${postID}`).addEventListener('click', () => unlikePost(postID));
+
+    const csrfToken = Cookies.get('csrftoken');
+    fetch(`like/${postID}`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': csrfToken
+        },
+        body: JSON.stringify({
+            action: "like"
+        })
+    });
+
+    // Update like count dynamically
+    const likesString = document.querySelector(`#likes-div-${postID}`).innerHTML;
+    let numberOfLikes = parseInt(likesString.replace("Number of likes: ", ""));
+    numberOfLikes++;
+    document.querySelector(`#likes-div-${postID}`).innerHTML = `Number of likes: ${numberOfLikes}`;
+    
+
+}
+
+
+function unlikePost(postID) {
+
+    // Replace unlike button with like button
+    document.querySelector(`#unlike-div-${postID}`).innerHTML = `<button id="like-btn-${postID}">Like</button>`;
+    document.querySelector(`#unlike-div-${postID}`).id = `like-div-${postID}`;
+    document.querySelector(`#like-btn-${postID}`).addEventListener('click', () => likePost(postID));
+
+    const csrfToken = Cookies.get('csrftoken');
+    fetch(`like/${postID}`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': csrfToken
+        },
+        body: JSON.stringify({
+            action: "unlike"
+        })
+    });
+
+    // Update like count dynamically
+    const likesString = document.querySelector(`#likes-div-${postID}`).innerHTML;
+    let numberOfLikes = parseInt(likesString.replace("Number of likes: ", ""));
+    numberOfLikes--;
+    document.querySelector(`#likes-div-${postID}`).innerHTML = `Number of likes: ${numberOfLikes}`;
 
 }
