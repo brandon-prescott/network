@@ -31,6 +31,14 @@
             <div>
                 Number of likes: {{ post.number_of_likes }}
             </div>
+            {% if user.is_authenticated %}
+                <div id="like-div-{{ post.id }}">
+                    <button id="like-btn-{{ post.id }}">Like</button>
+                </div>
+                <div class id="unlike-div-{{ post.id }}">
+                    <button id="unlike-btn-{{ post.id }}">Unlike</button>
+                </div>
+            {% endif %}
             <hr>
         </div>
     {% endfor %}

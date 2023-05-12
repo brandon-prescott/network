@@ -187,3 +187,39 @@ def post(request, post_id):
 @csrf_protect
 def profile_post(request, post_id):
     return post_content(request, post_id) # See utils.py for details
+
+
+@login_required(login_url = "login")
+@csrf_protect
+def like(request, post_id):
+    """Function will like or unlike a post based on if the user has already liked the post or not"""
+    # Query for requested post
+    try:
+        post = Post.objects.get(id=post_id)
+    except Post.DoesNotExist:
+        return JsonResponse({"error": "Post not found."}, status=404)
+    
+    # Update likes if input is valid
+    if request.method == "POST":
+        data = json.loads(request.body)
+        if data.get("action") is not None:
+            if data["action"] not in ["like", "unlike"]:
+                return HttpResponse(status=400)
+            elif data["action"] == "like":
+                number_of_likes = post.number_of_likes
+                number_of_likes += 1
+                post.number_of_likes = number_of_likes
+                post.save()
+                return HttpResponse(status=204)
+            else:
+                number_of_likes = post.number_of_likes
+                number_of_likes -= 1
+                post.number_of_likes = number_of_likes
+                post.save()
+                return HttpResponse(status=204)
+    
+    # Post must be via POST
+    else:
+        return JsonResponse({"error": "POST request required."}, status=400)
+
+    return redirect(index)
