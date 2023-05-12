@@ -93,8 +93,8 @@ function savePost(postID) {
 function likePost(postID) {
 
     // Replace like button with unlike button
-    document.querySelector(`#like-div-${postID}`).style.display = 'none';
-    document.querySelector(`#unlike-div-${postID}`).style.display = 'block';
+    document.querySelector(`#like-div-${postID}`).innerHTML = `<button id="unlike-btn-${postID}">Unlike</button>`;
+    document.querySelector(`#like-div-${postID}`).id = `unlike-div-${postID}`;
 
     const csrfToken = Cookies.get('csrftoken');
     fetch(`like/${postID}`, {
@@ -108,14 +108,21 @@ function likePost(postID) {
         })
     });
 
+    // Update like count dynamically
+    const likesString = document.querySelector(`#likes-div-${postID}`).innerHTML;
+    let numberOfLikes = parseInt(likesString.replace("Number of likes: ", ""));
+    numberOfLikes++;
+    document.querySelector(`#likes-div-${postID}`).innerHTML = `Number of likes: ${numberOfLikes}`;
+    
+
 }
 
 
 function unlikePost(postID) {
 
-    // Replace like button with unlike button
-    document.querySelector(`#like-div-${postID}`).style.display = 'block';
-    document.querySelector(`#unlike-div-${postID}`).style.display = 'none';
+    // Replace unlike button with like button
+    document.querySelector(`#unlike-div-${postID}`).innerHTML = `<button id="like-btn-${postID}">Like</button>`;
+    document.querySelector(`#unlike-div-${postID}`).id = `like-div-${postID}`;
 
     const csrfToken = Cookies.get('csrftoken');
     fetch(`like/${postID}`, {
@@ -128,5 +135,11 @@ function unlikePost(postID) {
             action: "unlike"
         })
     });
+
+    // Update like count dynamically
+    const likesString = document.querySelector(`#likes-div-${postID}`).innerHTML;
+    let numberOfLikes = parseInt(likesString.replace("Number of likes: ", ""));
+    numberOfLikes--;
+    document.querySelector(`#likes-div-${postID}`).innerHTML = `Number of likes: ${numberOfLikes}`;
 
 }

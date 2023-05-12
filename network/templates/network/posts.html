@@ -28,16 +28,18 @@
             <div>
                 {{ post.time }}
             </div>
-            <div>
+            <div id="likes-div-{{ post.id }}">
                 Number of likes: {{ post.number_of_likes }}
             </div>
-            {% if user.is_authenticated %}
+            {% if user.is_authenticated and post.id not in liked_post_ids %}
                 <div id="like-div-{{ post.id }}">
                     <button id="like-btn-{{ post.id }}">Like</button>
                 </div>
+            {% elif user.is_authenticated and post.id in liked_post_ids %}
                 <div class id="unlike-div-{{ post.id }}">
                     <button id="unlike-btn-{{ post.id }}">Unlike</button>
                 </div>
+            {% else %}
             {% endif %}
             <hr>
         </div>

@@ -14,6 +14,16 @@ from .utils import get_page_objects, post_content
 
 
 def index(request):
+
+    user = None
+    likes = None
+    liked_post_ids = []
+    if request.user.id is not None:
+        user = User.objects.get(id=request.user.id)
+        likes = Like.objects.filter(user=user)
+        for like in likes:
+            liked_post_ids.append(like.post.id)
+
     all_posts = Post.objects.all().order_by("-time")
     number_of_posts = len(all_posts)
 
@@ -21,6 +31,8 @@ def index(request):
     page_obj = get_page_objects(request, all_posts)
 
     return render(request, "network/index.html", {
+        "user": user,
+        "liked_post_ids": liked_post_ids,
         "form": PostForm,
         "page_obj": page_obj,
         "number_of_posts": number_of_posts
