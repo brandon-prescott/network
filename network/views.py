@@ -254,5 +254,3 @@ def like(request, post_id):
     # Post must be via POST
     else:
         return JsonResponse({"error": "POST request required."}, status=400)
-
-    return redirect(index)
