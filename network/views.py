@@ -10,7 +10,7 @@ from django.views.decorators.csrf import csrf_protect
 
 from .models import User, Post, Like, Follow
 from .forms import PostForm
-from .utils import get_page_objects, post_content
+from .utils import get_page_objects, post_content, update_likes
 
 
 def index(request):
@@ -112,8 +112,14 @@ def profile(request, profile_id):
         number_of_posts = len(all_user_posts)
 
         user = None
+        likes = None
+        liked_post_ids = []
         if request.user.id is not None:
             user = User.objects.get(id=request.user.id)
+            likes = Like.objects.filter(user=user)
+            for like in likes:
+                liked_post_ids.append(like.post.id)
+
         profile = User.objects.get(id=profile_id)
 
         followers = Follow.objects.filter(following=profile_id)
@@ -133,6 +139,7 @@ def profile(request, profile_id):
         
         return render(request, "network/profile.html", {
             "user": user,
+            "liked_post_ids": liked_post_ids,
             "profile": profile,
             "is_following": is_following,
             "followers_count": len(followers),
@@ -173,6 +180,15 @@ def follow(request):
         user_id = request.user.id
         following = Follow.objects.filter(user=user_id).order_by("-time")
 
+        user = None
+        likes = None
+        liked_post_ids = []
+        if request.user.id is not None:
+            user = User.objects.get(id=request.user.id)
+            likes = Like.objects.filter(user=user)
+            for like in likes:
+                liked_post_ids.append(like.post.id)
+
         follow_list = []
         for follow in following:
             follow_list.append(follow.following.id)
@@ -184,6 +200,8 @@ def follow(request):
         page_obj = get_page_objects(request, following_posts)
     
         return render(request, "network/following.html", {
+            "user": user,
+            "liked_post_ids": liked_post_ids,
             "page_obj": page_obj,
             "number_of_posts": number_of_posts
         })
@@ -192,65 +210,28 @@ def follow(request):
 @login_required(login_url="login")
 @csrf_protect
 def post(request, post_id):
-    return post_content(request, post_id) # See utils.py for details
+    return post_content(request, post_id) # Updates post content when accessed via the homepage
 
 
 @login_required(login_url="login")
 @csrf_protect
 def profile_post(request, post_id):
-    return post_content(request, post_id) # See utils.py for details
+    return post_content(request, post_id) # # Updates post content when accessed via the user's profile
 
 
 @login_required(login_url = "login")
 @csrf_protect
 def like(request, post_id):
-    """Function will like or unlike a post based on if the user has already liked the post or not"""
-    # Query for requested post
-    try:
-        post = Post.objects.get(id=post_id)
-    except Post.DoesNotExist:
-        return JsonResponse({"error": "Post not found."}, status=404)
-    
-    # Update likes if input is valid
-    if request.method == "POST":
-        data = json.loads(request.body)
-        if data.get("action") is not None:
-            if data["action"] not in ["like", "unlike"]:
-                return HttpResponse(status=400)
-            elif data["action"] == "like":
-                user_id = request.user.id
-                filter = {"user": user_id, "post": post_id}
-                if len(Like.objects.filter(**filter)) == 0:
-                    number_of_likes = post.number_of_likes
-                    number_of_likes += 1
-                    post.number_of_likes = number_of_likes
-                    post.save()
+    return update_likes(request, post_id) # Updates post likes when accessed via the homepage
 
-                    new_like = Like(
-                        user = User.objects.get(id=request.user.id),
-                        post = Post.objects.get(id=post_id)
-                    )
-                    new_like.save()
-                    return HttpResponse(status=204)
-                else:
-                    return HttpResponse(status=400)
-            else:
-                user_id = request.user.id
-                filter = {"user": user_id, "post": post_id}
-                if len(Like.objects.filter(**filter)) == 1:
-                    number_of_likes = post.number_of_likes
-                    number_of_likes -= 1
-                    post.number_of_likes = number_of_likes
-                    post.save()
 
-                    user_id = request.user.id
-                    filter = {"user": user_id, "post": post_id}
-                    Like.objects.filter(**filter).delete()
+@login_required(login_url = "login")
+@csrf_protect
+def profile_like(request, post_id):
+    return update_likes(request, post_id) # Updates post likes when accessed via the user's profile
 
-                    return HttpResponse(status=204)
-                else:
-                    return HttpResponse(status=400)
 
-    # Post must be via POST
-    else:
-        return JsonResponse({"error": "POST request required."}, status=400)
+@login_required(login_url = "login")
+@csrf_protect
+def following_like(request, post_id):
+    return update_likes(request, post_id) # Updates post likes when accessed via the user's following page
