@@ -2,9 +2,9 @@
 
 {% if number_of_posts > 0 %}
     {% for post in page_obj %}
-        <div>
+        <div class="post-panel">
             <div>
-                <a href="{% url 'profile' profile_id=post.user.id %}"><strong>{{ post.user }}</strong></a>
+                <a class="username" href="{% url 'profile' profile_id=post.user.id %}"><strong>{{ post.user }}</strong></a>
             </div>
             {% if user.is_authenticated and user.id == post.user.id %}
                 <div id="edit-div-{{ post.id }}">
@@ -41,7 +41,6 @@
                 </div>
             {% else %}
             {% endif %}
-            <hr>
         </div>
     {% endfor %}
 {% else %}

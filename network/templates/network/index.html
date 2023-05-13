@@ -1,13 +1,10 @@
 {% extends "network/layout.html" %}
 
 {% block body %}
-    <h2>All Posts</h2>
+    <h2>Home</h2>
 
     {% if user.is_authenticated %}
-        <div>
-            <div>
-                <strong>New Post</strong>
-            </div>
+        <div class="div-create">
             <form action="{% url 'create' %}" method="POST">
                 {% csrf_token %}
                 <div class="form-group">
