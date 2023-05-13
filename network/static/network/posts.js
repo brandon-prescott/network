@@ -93,7 +93,7 @@ function savePost(postID) {
 function likePost(postID) {
 
     // Replace like button with unlike button
-    document.querySelector(`#like-div-${postID}`).innerHTML = `<button id="unlike-btn-${postID}">Unlike</button>`;
+    document.querySelector(`#like-div-${postID}`).innerHTML = `<button class="remove-style" id="unlike-btn-${postID}"><i class="fa fa-heart heart-liked"></i></button>`;
     document.querySelector(`#like-div-${postID}`).id = `unlike-div-${postID}`;
     document.querySelector(`#unlike-btn-${postID}`).addEventListener('click', () => unlikePost(postID));
 
@@ -122,7 +122,7 @@ function likePost(postID) {
 function unlikePost(postID) {
 
     // Replace unlike button with like button
-    document.querySelector(`#unlike-div-${postID}`).innerHTML = `<button id="like-btn-${postID}">Like</button>`;
+    document.querySelector(`#unlike-div-${postID}`).innerHTML = `<button class="remove-style" id="like-btn-${postID}"><i class="fa fa-heart-o"></i></button>`;
     document.querySelector(`#unlike-div-${postID}`).id = `like-div-${postID}`;
     document.querySelector(`#like-btn-${postID}`).addEventListener('click', () => likePost(postID));
 

@@ -49,3 +49,14 @@ body {
     margin: 20px auto;
 }
 
+.remove-style {
+    background: none;
+    border: none;
+    padding: 0;
+    margin: 0;
+}
+
+.heart-liked {
+    color: red;
+}
+

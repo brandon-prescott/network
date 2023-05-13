@@ -33,11 +33,15 @@
             </div>
             {% if user.is_authenticated and post.id not in liked_post_ids %}
                 <div id="like-div-{{ post.id }}">
-                    <button id="like-btn-{{ post.id }}">Like</button>
+                    <button class="remove-style" id="like-btn-{{ post.id }}">
+                        <i class="fa fa-heart-o"></i>
+                    </button>
                 </div>
             {% elif user.is_authenticated and post.id in liked_post_ids %}
-                <div class id="unlike-div-{{ post.id }}">
-                    <button id="unlike-btn-{{ post.id }}">Unlike</button>
+                <div id="unlike-div-{{ post.id }}">
+                    <button class="remove-style" id="unlike-btn-{{ post.id }}">
+                        <i class="fa fa-heart heart-liked"></i>
+                    </button>
                 </div>
             {% else %}
             {% endif %}
