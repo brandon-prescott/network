@@ -56,7 +56,21 @@ body {
     margin: 0;
 }
 
-.heart-liked {
-    color: red;
+.remove-style:focus {
+    outline: none;
 }
+
+.heart-unliked {
+    color: grey;
+}
+
+.heart-unliked:hover {
+    color: #FF4033;
+}
+
+
+.heart-liked {
+    color: #FF4033;
+}
+
 

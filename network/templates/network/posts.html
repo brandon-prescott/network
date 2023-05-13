@@ -34,7 +34,7 @@
             {% if user.is_authenticated and post.id not in liked_post_ids %}
                 <div id="like-div-{{ post.id }}">
                     <button class="remove-style" id="like-btn-{{ post.id }}">
-                        <i class="fa fa-heart-o"></i>
+                        <i class="fa fa-heart-o heart-unliked"></i>
                     </button>
                 </div>
             {% elif user.is_authenticated and post.id in liked_post_ids %}
