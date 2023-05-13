@@ -110,10 +110,10 @@ function likePost(postID) {
     });
 
     // Update like count dynamically
-    const likesString = document.querySelector(`#likes-div-${postID}`).innerHTML;
-    let numberOfLikes = parseInt(likesString.replace("Number of likes: ", ""));
+    const likesString = document.querySelector(`#likes-count-${postID}`).innerHTML;
+    let numberOfLikes = parseInt(likesString);
     numberOfLikes++;
-    document.querySelector(`#likes-div-${postID}`).innerHTML = `Number of likes: ${numberOfLikes}`;
+    document.querySelector(`#likes-count-${postID}`).innerHTML = `${numberOfLikes}`;
     
 
 }
@@ -139,9 +139,9 @@ function unlikePost(postID) {
     });
 
     // Update like count dynamically
-    const likesString = document.querySelector(`#likes-div-${postID}`).innerHTML;
-    let numberOfLikes = parseInt(likesString.replace("Number of likes: ", ""));
+    const likesString = document.querySelector(`#likes-count-${postID}`).innerHTML;
+    let numberOfLikes = parseInt(likesString);
     numberOfLikes--;
-    document.querySelector(`#likes-div-${postID}`).innerHTML = `Number of likes: ${numberOfLikes}`;
+    document.querySelector(`#likes-count-${postID}`).innerHTML = `${numberOfLikes}`;
 
 }

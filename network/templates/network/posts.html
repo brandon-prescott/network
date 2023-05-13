@@ -28,23 +28,23 @@
             <div>
                 {{ post.time }}
             </div>
-            <div id="likes-div-{{ post.id }}">
-                Number of likes: {{ post.number_of_likes }}
+            <div class="likes-container" id="likes-div-{{ post.id }}">
+                {% if user.is_authenticated and post.id not in liked_post_ids %}
+                    <div id="like-div-{{ post.id }}">
+                        <button class="remove-style" id="like-btn-{{ post.id }}">
+                            <i class="fa fa-heart-o heart-unliked"></i>
+                        </button>
+                    </div>
+                {% elif user.is_authenticated and post.id in liked_post_ids %}
+                    <div id="unlike-div-{{ post.id }}">
+                        <button class="remove-style" id="unlike-btn-{{ post.id }}">
+                            <i class="fa fa-heart heart-liked"></i>
+                        </button>
+                    </div>
+                {% else %}
+                {% endif %}
+                <span class="likes-count" id="likes-count-{{ post.id }}">{{ post.number_of_likes }}</span>
             </div>
-            {% if user.is_authenticated and post.id not in liked_post_ids %}
-                <div id="like-div-{{ post.id }}">
-                    <button class="remove-style" id="like-btn-{{ post.id }}">
-                        <i class="fa fa-heart-o heart-unliked"></i>
-                    </button>
-                </div>
-            {% elif user.is_authenticated and post.id in liked_post_ids %}
-                <div id="unlike-div-{{ post.id }}">
-                    <button class="remove-style" id="unlike-btn-{{ post.id }}">
-                        <i class="fa fa-heart heart-liked"></i>
-                    </button>
-                </div>
-            {% else %}
-            {% endif %}
         </div>
     {% endfor %}
 {% else %}

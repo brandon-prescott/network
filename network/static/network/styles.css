@@ -73,4 +73,12 @@ body {
     color: #FF4033;
 }
 
+.likes-container {
+    display: flex;
+}
+  
+.likes-count {
+    margin-left: 5px;
+    color: grey;
+}
 
