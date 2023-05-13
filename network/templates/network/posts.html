@@ -25,8 +25,8 @@
                 {{ post.content }}
             </div>
             {% if user.is_authenticated and user.id == post.user.id %}
-                <div class="default-hidden" id="content-div-{{ post.id }}-editing">
-                    <textarea id="content-textarea-{{ post.id }}">{{ post.content }}</textarea> 
+                <div class="default-hidden post-content-editing" id="content-div-{{ post.id }}-editing">
+                    <textarea class="form-control" rows="6" maxlength="280" id="content-textarea-{{ post.id }}">{{ post.content }}</textarea> 
                 </div>
                 <div class="default-hidden input-error" id="input-error-{{ post.id }}">
                     Post cannot be blank.
