@@ -3,8 +3,13 @@
 {% if number_of_posts > 0 %}
     {% for post in page_obj %}
         <div class="post-panel">
-            <div>
-                <a class="username" href="{% url 'profile' profile_id=post.user.id %}"><strong>{{ post.user }}</strong></a>
+            <div class="post-header">
+                <div>
+                    <a class="username" href="{% url 'profile' profile_id=post.user.id %}"><strong>{{ post.user }}</strong></a>
+                </div>
+                <div class="post-time">
+                    &bull; {{ post.time }}
+                </div>
             </div>
             {% if user.is_authenticated and user.id == post.user.id %}
                 <div id="edit-div-{{ post.id }}">
@@ -25,9 +30,6 @@
                     Post cannot be blank.
                 </div>
             {% endif %}
-            <div>
-                {{ post.time }}
-            </div>
             <div class="likes-container" id="likes-div-{{ post.id }}">
                 {% if user.is_authenticated and post.id not in liked_post_ids %}
                     <div id="like-div-{{ post.id }}">
