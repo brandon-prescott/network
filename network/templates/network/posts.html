@@ -21,7 +21,7 @@
                     {% endif %}
                 </div>
             </div>
-            <div id="content-div-{{ post.id }}-saved">
+            <div class="post-content-saved" id="content-div-{{ post.id }}-saved">
                 {{ post.content }}
             </div>
             {% if user.is_authenticated and user.id == post.user.id %}

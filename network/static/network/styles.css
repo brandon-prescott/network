@@ -23,7 +23,6 @@ body {
     margin: 0 auto;
     margin-bottom: 10px;
     width: 800px;
-    min-height: 200px;
 }
 
 .post-panel:hover {
@@ -94,4 +93,10 @@ body {
 
 .edit-btn-container {
     margin-left: auto;
+}
+
+.post-content-saved {
+    word-wrap: break-word;
+    margin-top: 10px;
+    margin-bottom: 10px;
 }

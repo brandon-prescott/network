@@ -13,6 +13,6 @@ class PostForm(forms.ModelForm):
             "content": forms.Textarea(attrs={
             "placeholder": "What's happening?",
             "class": "form-control",
-            "rows": 3
+            "rows": 6
             })
         }
