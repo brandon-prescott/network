@@ -103,6 +103,8 @@ def create(request):
             )
             new_post.save()
             return redirect(index)
+        else:
+            return redirect(index)
     else:
         return redirect(index)
     

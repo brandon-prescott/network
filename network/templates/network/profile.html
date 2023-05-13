@@ -3,8 +3,17 @@
 {% block body %}
     <h2>{{ profile.username }}</h2>
 
+    <div class="follow-count-container">
+        <div class="follow-div">
+            <h3><strong>{{ following_count }}</strong> Following</h3>
+        </div>
+        <div class="follow-div">
+            <h3><strong>{{ followers_count }}</strong> Followers</h3>
+        </div>
+    </div>
+
     {% if user.is_authenticated and user.id != profile.id %}
-        <div>
+        <div class="follow-btn-div">
             <form action="{% url 'follow' %}" method="POST">
                 {% csrf_token %}
                 {% if is_following == True %}
@@ -20,12 +29,6 @@
         </div>
     {% endif %}
 
-    <div>
-        Followers: {{ followers_count }}
-    </div>
-    <div>
-        Following: {{ following_count }}
-    </div>
     <hr>
     
     {% include "network/posts.html" %}

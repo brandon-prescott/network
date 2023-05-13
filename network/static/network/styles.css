@@ -4,6 +4,10 @@ h2 {
     margin: 20px;
 }
 
+h3 {
+    font-size: 20px;
+}
+
 body {
     padding: 10px;
 }
@@ -104,4 +108,18 @@ body {
 .post-content-editing {
     margin-top: 10px;
     margin-bottom: 10px;
+}
+
+.follow-btn-div {
+    text-align: center;
+}
+
+.follow-count-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.follow-div {
+    margin: 5px;
 }
