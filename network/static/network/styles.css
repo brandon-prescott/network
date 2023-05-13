@@ -91,3 +91,7 @@ body {
     margin-left: 5px;
     color: grey;
 }
+
+.edit-btn-container {
+    margin-left: auto;
+}

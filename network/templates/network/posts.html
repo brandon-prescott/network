@@ -10,15 +10,17 @@
                 <div class="post-time">
                     &bull; {{ post.time }}
                 </div>
+                <div class="edit-btn-container">
+                    {% if user.is_authenticated and user.id == post.user.id %}
+                        <div id="edit-div-{{ post.id }}">
+                            <button class="btn btn-outline-primary btn-sm" id="edit-btn-{{ post.id }}">Edit</button>
+                        </div>
+                        <div class="default-hidden" id="save-div-{{ post.id }}">
+                            <button class="btn btn-primary btn-sm" id="save-btn-{{ post.id }}">Save</button>
+                        </div>
+                    {% endif %}
+                </div>
             </div>
-            {% if user.is_authenticated and user.id == post.user.id %}
-                <div id="edit-div-{{ post.id }}">
-                    <button id="edit-btn-{{ post.id }}">Edit</button>
-                </div>
-                <div class="default-hidden" id="save-div-{{ post.id }}">
-                    <button id="save-btn-{{ post.id }}">Save</button>
-                </div>
-            {% endif %}
             <div id="content-div-{{ post.id }}-saved">
                 {{ post.content }}
             </div>
