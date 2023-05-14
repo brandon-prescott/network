@@ -46,6 +46,11 @@
                         </button>
                     </div>
                 {% else %}
+                    <div id="inactive-like-div-{{ post.id }}">
+                        <button class="remove-style" id="inactive-like-btn-{{ post.id }}">
+                            <i class="fa fa-heart-o heart-inactive"></i>
+                        </button>
+                    </div>
                 {% endif %}
                 <span class="likes-count" id="likes-count-{{ post.id }}">{{ post.number_of_likes }}</span>
             </div>

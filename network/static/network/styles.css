@@ -76,6 +76,10 @@ body {
     color: #FF4033;
 }
 
+.heart-inactive {
+    color: grey;
+}
+
 .likes-container {
     display: flex;
 }
