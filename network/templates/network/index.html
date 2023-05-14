@@ -7,10 +7,12 @@
         <div class="div-create">
             <form action="{% url 'create' %}" method="POST">
                 {% csrf_token %}
-                <div class="form-group">
+                <div class="form-group" id="create-textarea-div">
                     {{ form.content }}
                 </div>
-                <button type="submit" class="btn btn-primary">Post</button>
+                <div class="default-hidden input-error" id="create-error">
+                </div>
+                <button type="submit" class="btn btn-primary" id="post-btn">Post</button>
             </form>
         </div>
     {% endif %}

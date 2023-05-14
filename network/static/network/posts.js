@@ -1,5 +1,16 @@
 document.addEventListener('DOMContentLoaded', function() {
 
+    // Check for post input error and display error message if invalid
+    const postBtn = document.querySelector('#post-btn');
+    postBtn.addEventListener('click', function() {
+        const postContent = document.querySelector('#create-textarea').value;
+        if (postContent === "" || postContent.trim().length === 0) {
+            document.querySelector('#create-error').style.display = 'block';
+            document.querySelector('#create-error').innerHTML = 'Post cannot be blank.';
+        }
+    });
+
+
     // Select all buttons with IDs in the format "...-btn-{id}"
     const editBtns = document.querySelectorAll('[id^="edit-btn-"]');
     const likeBtns = document.querySelectorAll('[id^="like-btn-"]');
@@ -58,6 +69,7 @@ function savePost(postID) {
     // Post cannot be blank or contain only whitespace
     if (newContent === "" || newContent.trim().length === 0) {
         document.querySelector(`#input-error-${postID}`).style.display = 'block';
+        document.querySelector(`#input-error-${postID}`).innerHTML = 'Post cannot be blank.';
     } else {
         // Update database with edited post content
         // Django forbids use of PUT request, so POST request is used with CSRF token for security
