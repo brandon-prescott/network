@@ -93,3 +93,15 @@ def update_likes(request, post_id):
     # Post must be via POST
     else:
         return JsonResponse({"error": "POST request required."}, status=400)
+    
+
+def get_liked_posts(request):
+    """Function returns a list of post IDs that the user has liked"""
+    likes = None
+    liked_post_ids = []
+    user = User.objects.get(id=request.user.id)
+    likes = Like.objects.filter(user=user)
+    for like in likes:
+        liked_post_ids.append(like.post.id)
+
+    return liked_post_ids

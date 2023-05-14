@@ -26,7 +26,6 @@ class Post(models.Model):
         }
 
     
-
 class Like(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True, related_name="like_user")
     post = models.ForeignKey(Post, on_delete=models.CASCADE, blank=True, null=True, related_name="like_post")

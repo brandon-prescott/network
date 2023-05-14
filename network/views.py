@@ -10,22 +10,20 @@ from django.views.decorators.csrf import csrf_protect
 
 from .models import User, Post, Like, Follow
 from .forms import PostForm
-from .utils import get_page_objects, post_content, update_likes
+from .utils import *
 
 
 def index(request):
-
-    user = None
-    likes = None
-    liked_post_ids = []
-    if request.user.id is not None:
-        user = User.objects.get(id=request.user.id)
-        likes = Like.objects.filter(user=user)
-        for like in likes:
-            liked_post_ids.append(like.post.id)
-
+    # Get all posts
     all_posts = Post.objects.all().order_by("-time")
     number_of_posts = len(all_posts)
+
+    # If user is logged in, return their liked posts on this page
+    user = None
+    liked_post_ids=[]
+    if request.user.id is not None:
+        user = User.objects.get(id=request.user.id)
+        liked_post_ids = get_liked_posts(request)
 
     # Limit number of posts per page
     page_obj = get_page_objects(request, all_posts)
@@ -110,31 +108,31 @@ def create(request):
     
 
 def profile(request, profile_id):
+        # Get current profile and all posts
         all_user_posts = Post.objects.filter(user=profile_id).order_by("-time")
         number_of_posts = len(all_user_posts)
-
-        user = None
-        likes = None
-        liked_post_ids = []
-        if request.user.id is not None:
-            user = User.objects.get(id=request.user.id)
-            likes = Like.objects.filter(user=user)
-            for like in likes:
-                liked_post_ids.append(like.post.id)
-
         profile = User.objects.get(id=profile_id)
 
+        # If user is logged in, return their liked posts on this page
+        user = None
+        liked_post_ids=[]
+        if request.user.id is not None:
+            user = User.objects.get(id=request.user.id)
+            liked_post_ids = get_liked_posts(request)
+
+        # Generate followers and following lists
         followers = Follow.objects.filter(following=profile_id)
         follower_list = []
         for follower in followers:
             follower_list.append(follower.user)
 
+        following = Follow.objects.filter(user=profile_id)
+
+        # Check if user is following this profile
         if user in follower_list:
             is_following = True
         else:
             is_following = False
-
-        following = Follow.objects.filter(user=profile_id)
 
         # Limit number of posts per page
         page_obj = get_page_objects(request, all_user_posts)
@@ -154,9 +152,11 @@ def profile(request, profile_id):
 @login_required(login_url="login")
 def follow(request):
     if request.method == "POST":
+        # Get current profile and whether the user has requested to follow or unfollow the profile
         profile_id = request.POST["profile_id"]
         follow_action = request.POST["follow_action"]
 
+        # Check valid request
         if follow_action not in ["follow", "unfollow"]:
             return render(request, "auctions/error.html", {
             "message": "Bad request",
@@ -164,6 +164,7 @@ def follow(request):
             })
         
         if follow_action == "follow":
+            # Follow the current profile
             new_follow = Follow(
                 user = User.objects.get(id=request.user.id),
                 following = User.objects.get(id=profile_id)
@@ -172,29 +173,27 @@ def follow(request):
             return redirect(profile, profile_id=profile_id)
         
         if follow_action == "unfollow":
+            # Unfollow the current profile
             user_id = request.user.id
             filter = {"user": user_id, "following": profile_id}
             Follow.objects.filter(**filter).delete()
             return redirect(profile, profile_id=profile_id)
 
     else:
-
-        user_id = request.user.id
-        following = Follow.objects.filter(user=user_id).order_by("-time")
-
+        # If user is logged in, return their liked posts on this page
         user = None
-        likes = None
-        liked_post_ids = []
+        liked_post_ids=[]
         if request.user.id is not None:
             user = User.objects.get(id=request.user.id)
-            likes = Like.objects.filter(user=user)
-            for like in likes:
-                liked_post_ids.append(like.post.id)
+            liked_post_ids = get_liked_posts(request)
 
+        # Get list of profiles that the current user is following
+        following = Follow.objects.filter(user=request.user.id).order_by("-time")
         follow_list = []
         for follow in following:
             follow_list.append(follow.following.id)
 
+        # Get all posts from the followed profiles
         following_posts = Post.objects.filter(user__in=follow_list).order_by("-time")
         number_of_posts = len(following_posts)
 
@@ -218,7 +217,7 @@ def post(request, post_id):
 @login_required(login_url="login")
 @csrf_protect
 def profile_post(request, post_id):
-    return post_content(request, post_id) # # Updates post content when accessed via the user's profile
+    return post_content(request, post_id) # Updates post content when accessed via the user's profile
 
 
 @login_required(login_url = "login")
