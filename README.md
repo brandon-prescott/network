@@ -4,7 +4,7 @@
 
 Design a Twitter-like social network website for making posts and following users.
 
-* **New Post:** Users who are signed in should be able to write a new text-based post by filling in text into a text area and then clicking a button to submit the post.
+* **New Post:** Users who are signed in should be able to write a new text-based post by filling in text into a text area and then clicking a button to submit the post (@00:05).
 * **All Posts:** The home page should show posts from all users, with most recent posts first.
 * **Profile Page:** Clicking on a username should load that user’s profile page. This page should:
   * Display the number of followers the user has, as well as the number of people that the user follows.
