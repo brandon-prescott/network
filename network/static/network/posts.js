@@ -32,7 +32,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-})
+});
 
 
 function editPost(postID) {
@@ -58,6 +58,7 @@ function savePost(postID) {
     // Post cannot be blank or contain only whitespace
     if (newContent === "" || newContent.trim().length === 0) {
         document.querySelector(`#input-error-${postID}`).style.display = 'block';
+        document.querySelector(`#input-error-${postID}`).innerHTML = 'Post cannot be blank.';
     } else {
         // Update database with edited post content
         // Django forbids use of PUT request, so POST request is used with CSRF token for security

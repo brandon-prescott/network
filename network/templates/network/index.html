@@ -1,4 +1,5 @@
 {% extends "network/layout.html" %}
+{% load static %}
 
 {% block body %}
     <h2>Home</h2>
@@ -7,10 +8,12 @@
         <div class="div-create">
             <form action="{% url 'create' %}" method="POST">
                 {% csrf_token %}
-                <div class="form-group">
+                <div class="form-group" id="create-textarea-div">
                     {{ form.content }}
                 </div>
-                <button type="submit" class="btn btn-primary">Post</button>
+                <div class="default-hidden input-error" id="create-error">
+                </div>
+                <button type="submit" class="btn btn-primary" id="post-btn">Post</button>
             </form>
         </div>
     {% endif %}
@@ -18,4 +21,8 @@
     
     {% include "network/posts.html" %}
 
+{% endblock %}
+
+{% block script %}
+    <script src="{% static 'network/index.js' %}"></script>
 {% endblock %}

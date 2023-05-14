@@ -102,7 +102,7 @@ def create(request):
             new_post.save()
             return redirect(index)
         else:
-            return redirect(index)
+            return HttpResponse(status=204)
     else:
         return redirect(index)
     

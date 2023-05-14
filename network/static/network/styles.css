@@ -19,6 +19,7 @@ body {
 
 .input-error {
     color: red;
+    margin-bottom: 5px;
 }
 
 .post-panel {
